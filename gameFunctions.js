@@ -1,6 +1,7 @@
 // gameFunctions.js
 const prompt = require("prompt-sync")({ sigint: true });
 //__________________Objects_____________________________
+//__________________Entetys_____________________________
 const fists = {
     name: "Your fists",
     dmg: 1
@@ -9,19 +10,59 @@ const woodSword = {
     name: "Wodden sword",
     dmg: 10
 }
+//__________________Entetys_____________________________
+let player = {
+    name: pname,
+    level: 1,
+    xp: 0,
+    dmg: 1,
+    skill: "",
+    speed: "",
+    //Health
+    bHealth: pLvl * 100 / 4,
+    health: pBHealth,
+    //Mana
+    intelegence: 5 * level,
+    maxMana: (pIntelegence + 3) * pLvl,
+    mana: pMaxMana,
+    manaRegen: pIntelegence * pLvl,
+    //Damage
+    strengh: pLvl * 2,
+    bDmg: pStrengh,
+    eWeapon: (inventory[0].dmg),
+    weaponDmg: eWeapon,
+    dmg: pBDmg + pWeaponDmg,
+    //Defense
+    bArmor: strengh * level,
+    Armor: bArmor
+}
+const eSlime = {
+    name: "Slime of the Mansion",
+    dmg: 1,
+    bHealth: 5
+}
 //__________________Player_Stats________________________
+
 let pname = undefined
-let pLvl = 1
 const inventory = [fists]
-let pIntelegence = 0
-let pStrengh = 0 * 1;
+/*
+let pLvl = 1
+let pIntelegence = 5
+let pStrengh = pLvl * 2;
 let pBHealth = pLvl * 100 / 4 // 
 let pHealth = pBHealth
-let pBDmg = pLvl * 2
+let pBDmg = pStrengh
 let eWeapon = (inventory[0].dmg)
 let pWeaponDmg = eWeapon
 let pDmg = pBDmg + pWeaponDmg
 let pXP = 0
+let pSkill = ""
+let pSpeed = ""
+let pMaxMana = (pIntelegence + 3) * pLvl
+let pMana = pMaxMana
+let pManaRegen = pIntelegence * pLvl
+let pRüstung = ""
+*/
 //__________________Game_Stats__________________________
 let slimeLevel = 1
 let sDmg = slimeLevel
@@ -29,6 +70,7 @@ let sHealth = slimeLevel * 2
 let anwsInvalid = true
 let location = undefined
 let firstTimeC3 = true
+let eHealth = undefined
 //__________________Game_Functions______________________
 function checkEveryTurn() { }
 function checkMovementInvalid() {
@@ -51,11 +93,37 @@ function checkFightInvalid() {
     } // Wenn die Antwort FLEE oder ATTACK ist, dann geht es weiter, weil der While Loop beendet wird (anwsInvalid wird false statt true) eine falsche Antwort lässt einen im Loop hängen
     return event
 }
+function exploreRoom() {
+    function foundNothing() {
+        console.log("*you look around in the room and find nothing*")
+    }
+    if (location === "B-3") {
+        foundNothing()
+    }
+    if (location === "C-3") {
+        if (firstTimeC3 = true) {
+            firstTimeC3 = false
+            console.log("*you look around and after a while you find somethin.*")
+            console.log("* After you come closer you notice that what you found is an Wood Sword, it looks like a child used it to train.*")
+            console.log("* You take it and equip it as you weapon*")
+            inventory.push(woodSword)
+            eWeapon = woodSword
+        }
+        if (firstTimeC3 === false) { foundNothing() }
+    }
+}
+function showInventory() {
+    console.log("Your Inventory stors:", inventory.length, "items"
+    )
+    for (let i = 0; i < inventory.length; i++) {
+        console.log(i + 1 + ".", inventory[i].name)
+    }
+}
 
 //__________________Shown_Functions_____________________
 function plot() {
-    const qname = prompt("   -What is your name?-");
-    pname = qname
+    const room = prompt("   -What is your name?-");
+    room = qname
     console.log("*Its a late night and the sun has alredy sunken.It cold outside and fog covers the floor.")
     console.log("You enter an old mansion, as you open the door you can hear it squek.")
     console.log("The secons both of your legs are inside, the door falls back into the lock and is now unable to open again.*")
@@ -97,31 +165,9 @@ function maps() {
     console.log("")
 
 }
-function exploreRoom() {
-    function foundNothing() {
-        console.log("*you look around in the room and find nothing*")
-    }
-    if (location === "B-3") {
-        foundNothing()
-    }
-    if (location === "C-3") {
-        if (firstTimeC3 = true) {
-            firstTimeC3 = false
-            console.log("*you look around and after a while you find somethin.*")
-            console.log("* After you come closer you notice that what you found is an Wood Sword, it looks like a child used it to train.*")
-            console.log("* You take it and equip it as you weapon*")
-            inventory.push(woodSword)
-            eWeapon = woodSword
-        }
-        if (firstTimeC3 === false) { foundNothing() }
-    }
-}
-function showInventory() {
-    console.log("Your Inventory stors:", inventory.length, "items"
-    )
-    for (let i = 0; i < inventory.length; i++) {
-        console.log(i + 1 + ".", inventory[i].name)
-    }
+
+function fight() {
+
 }
 
 
@@ -145,12 +191,9 @@ function roomc2() {
     location = "C-2"
     console.log(`*You Leave the room and head west, you are now in an old garden filles with dead flowers. Out of the Blue a Slime come closer to your direction.*`);
     console.log("Options: F- FLEE, A- ATTACK.");
-    let event = checkFightInvalid();
-    if (event === "F") {
-        console.log(`*You run away and go to the last room*`);
-        roomb3()
-    }
-    if (event === "A") {
+    const room = prompt("   -What is your choise?-");
+    if (room === "F") { console.log("*You run away until you are back in the entrance*"); location = "B-3"; roomb3() }
+    if (room === "A") {
         if (Math.random() > 0.5) {
             console.log(`*You Take your sword and swing it into the direction of the little slime. With one clean cut he is defeated*`);
             pXP++;
