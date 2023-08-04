@@ -1,14 +1,21 @@
 // gameFunctions.js
 const prompt = require("prompt-sync")({ sigint: true });
+//__________________Objects_____________________________
+const woodSword = {
+    name: "Wodden sword",
+    dmg: 10
+}
 //__________________Player_Stats________________________
 let pname = undefined
 let pLvl = 1
+const inventory = [woodSword]
 let pIntelegence = 0
 let pStrengh = 0 * 1;
 let pBHealth = pLvl * 100 / 4 // 
 let pHealth = pBHealth
 let pBDmg = pLvl * 2
-let pWeaponDmg = 0
+let eWeapon = (inventory[0].dmg)
+let pWeaponDmg = eWeapon
 let pDmg = pBDmg + pWeaponDmg
 let pXP = 0
 //__________________Game_Stats__________________________
@@ -95,16 +102,12 @@ function start() {
 
 function roomb3() {
     while (true) {
-        console.log("   -Your options: E-EXPLORE, W-FORWARD, Q-STATS-")
+        console.log("   -Your options: E-EXPLORE, W-FORWARD, Q-STATS-, I- Inventory")
         const room = prompt("   -What is your choise?-");
 
-        if (room === "W") {
-            roomc3() //nächste funktion startet 
-        } else if (room === "Q") {
-            stats() //stats wird geöffnet
-        } else if (room === "E") {
-            console.log("*you look around in the room and find nothing*")
-        }
+        if (room === "W") { roomc3() }
+        if (room === "Q") { stats() }
+        if (room === "E") { console.log("*you look around in the room and find nothing*") }
     }
 }
 
@@ -122,7 +125,8 @@ function roomc3() {
             stats()
         } else if (room === "E") {
             console.log("*you look around and after a while you find somethin. After you come closer you notice that what you found is an old dagger. You take it and equip it as you weapon*")
-            pDmg = pDmg + 10
+            inventory.push(woodSword)
+            eWeapon = woodSword
         }
     }
 }
