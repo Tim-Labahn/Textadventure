@@ -1,7 +1,6 @@
 // gameFunctions.js
 const prompt = require("prompt-sync")({ sigint: true });
 //__________________Objects_____________________________
-//__________________Entetys_____________________________
 const fists = {
     name: "Your fists",
     dmg: 1
@@ -10,60 +9,8 @@ const woodSword = {
     name: "Wodden sword",
     dmg: 10
 }
-//__________________Entetys_____________________________
-let player = {
-    name: pname,
-    level: 1,
-    xp: 0,
-    dmg: 1,
-    skill: "",
-    speed: "",
-    //Health
-    bHealth: pLvl * 100 / 4,
-    health: pBHealth,
-    //Mana
-    intelegence: 5 * level,
-    maxMana: (pIntelegence + 3) * pLvl,
-    mana: pMaxMana,
-    manaRegen: pIntelegence * pLvl,
-    //Damage
-    strengh: pLvl * 2,
-    bDmg: pStrengh,
-    eWeapon: (inventory[0].dmg),
-    weaponDmg: eWeapon,
-    dmg: pBDmg + pWeaponDmg,
-    //Defense
-    bArmor: strengh * level,
-    Armor: bArmor
-}
-const eSlime = {
-    name: "Slime of the Mansion",
-    dmg: 1,
-    bHealth: 5
-}
-//__________________Player_Stats________________________
-
-let pname = undefined
-const inventory = [fists]
-/*
-let pLvl = 1
-let pIntelegence = 5
-let pStrengh = pLvl * 2;
-let pBHealth = pLvl * 100 / 4 // 
-let pHealth = pBHealth
-let pBDmg = pStrengh
-let eWeapon = (inventory[0].dmg)
-let pWeaponDmg = eWeapon
-let pDmg = pBDmg + pWeaponDmg
-let pXP = 0
-let pSkill = ""
-let pSpeed = ""
-let pMaxMana = (pIntelegence + 3) * pLvl
-let pMana = pMaxMana
-let pManaRegen = pIntelegence * pLvl
-let pRüstung = ""
-*/
 //__________________Game_Stats__________________________
+let inventory = [fists]
 let slimeLevel = 1
 let sDmg = slimeLevel
 let sHealth = slimeLevel * 2
@@ -71,8 +18,55 @@ let anwsInvalid = true
 let location = undefined
 let firstTimeC3 = true
 let eHealth = undefined
+let strongestWeaponID = 0
+let strongestWeaponName = inventory[strongestWeaponID].name
+let strongestWeaponDmg = inventory[strongestWeaponID].dmg
+let itemsCheck1 = 0
+let itemsCheck2 = 1
+
+//__________________Player_Stats________________________
+let pname = undefined
+let pLvl = 1
+let pXP = 0
+//Health
+let pFitness = 10 * pLvl
+let pSpeed = pFitness / 5
+let pBHealth = pLvl * pFitness
+let pHealth = pBHealth
+//Mana
+let pIntelegence = 5 * pLvl
+let pMaxMana = (pIntelegence + 3) * pLvl
+let pMana = pMaxMana
+let pManaRegen = pIntelegence * pLvl
+//Damage
+let pStrengh = pLvl * 2;
+let pBDmg = pStrengh
+let eWeapon = (inventory[strongestWeaponID].dmg)
+let pWeaponDmg = eWeapon //later + buffs
+let pDmg = pBDmg + pWeaponDmg
+//Defense
+let pBDefense = pStrengh //natürlicher schutz
+let pEDefense = 0 //extras schutz zb rüstung
+let pArmour = pBDefense + pEDefense
+//__________________Entetys_____________________________
+const eSlime = {
+    name: "Slime of the Mansion",
+    dmg: 1,
+    bHealth: 5
+}
+
 //__________________Game_Functions______________________
-function checkEveryTurn() { }
+function checkEveryTurn() {
+    itemsCheck2 = inventory.length
+    if (itemsCheck2 > itemsCheck1) {
+        for (let i = 0; i < inventory.length; i++) {
+            if (inventory[i].dmg > strongestWeaponDmg) {
+                strongestWeaponID = inventory[i++]
+            }
+        }
+    }
+
+}
 function checkMovementInvalid() {
     let event;
     while (anwsInvalid) {
@@ -101,7 +95,8 @@ function exploreRoom() {
         foundNothing()
     }
     if (location === "C-3") {
-        if (firstTimeC3 = true) {
+        if (firstTimeC3 === false) { foundNothing() }
+        if (firstTimeC3 === true) {
             firstTimeC3 = false
             console.log("*you look around and after a while you find somethin.*")
             console.log("* After you come closer you notice that what you found is an Wood Sword, it looks like a child used it to train.*")
@@ -109,8 +104,8 @@ function exploreRoom() {
             inventory.push(woodSword)
             eWeapon = woodSword
         }
-        if (firstTimeC3 === false) { foundNothing() }
     }
+    checkEveryTurn()
 }
 function showInventory() {
     console.log("Your Inventory stors:", inventory.length, "items"
@@ -123,7 +118,7 @@ function showInventory() {
 //__________________Shown_Functions_____________________
 function plot() {
     const room = prompt("   -What is your name?-");
-    room = qname
+    pname = room
     console.log("*Its a late night and the sun has alredy sunken.It cold outside and fog covers the floor.")
     console.log("You enter an old mansion, as you open the door you can hear it squek.")
     console.log("The secons both of your legs are inside, the door falls back into the lock and is now unable to open again.*")
@@ -147,6 +142,7 @@ function stats() {
     console.log("Level:            ", pLvl)
     console.log("EP:               ", pXP)
     console.log("")
+    console.log("Weapon:            ", inventory[strongestWeaponID].name)
     console.log("Damage:            ", pDmg)
     console.log("")
     console.log("Location:          ", location)

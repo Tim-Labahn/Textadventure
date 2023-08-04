@@ -1,5 +1,49 @@
-*Its a late night and the sun has alredy sunken. It cold outside and fog covers the floor.
-You enter an old mansion, as you open the door you can hear it squek. 
-The secons both of your legs are inside the door fals back into the lock and is now unable to open again.*
-- Your options: EXPLORE, FORWARD, STATS-
--What is your choise?-
+let player = {
+    name: pname,
+    level: pLevel,
+    xp: pXP,
+    //Health
+    fitness: pFitness
+    speed: fitness / 5,
+    bHealth: pLvl * fitness,
+    health: pBHealth,
+    //Mana
+    intelegence: 5 * level,
+    maxMana: (pIntelegence + 3) * pLvl,
+    mana: pMaxMana,
+    manaRegen: pIntelegence * pLvl,
+    //Damage
+    strengh: pLvl * 2,
+    bDmg: pStrengh,
+    eWeapon: (inventory[0].dmg),
+    weaponDmg: eWeapon,
+    dmg: pBDmg + pWeaponDmg,
+    //Defense
+    bArmor: strengh * level,
+    Armor: bArmor
+}
+
+let pname = undefined
+let inventory = [fists]
+let pLvl = 1
+let pXP = 0
+//Health
+let pFitness = 10 * pLvl
+let pSpeed = pFitness / 5
+let pBHealth = pLvl * pFitness
+let pHealth = pBHealth
+//Mana
+let pIntelegence = 5 * pLvl
+let pMaxMana = (pIntelegence + 3) * pLvl
+let pMana = pMaxMana
+let pManaRegen = pIntelegence * pLvl
+//Damage
+let pStrengh = pLvl * 2;
+let pBDmg = pStrengh
+let eWeapon = (inventory[0].dmg)
+let pWeaponDmg = eWeapon
+let pDmg = pBDmg + pWeaponDmg
+//Defense
+let pBDefense = pStrengh //natürlicher schutz
+let pEDefense = 0 //extras schutz zb rüstung
+let pArmour = pBDefense + pEDefense
