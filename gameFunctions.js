@@ -6,8 +6,14 @@ const fists = {
     dmg: 1
 }
 const woodSword = {
-    name: "Wodden sword",
+    name: "Wooden sword",
     dmg: 10
+}
+const roomInfos = {
+    b3: "",
+    c2: "",
+    c3: "",
+    c4: ""
 }
 //__________________Game_Stats__________________________
 let inventory = [fists]
@@ -18,9 +24,6 @@ let anwsInvalid = true
 let location = undefined
 let firstTimeC3 = true
 let eHealth = undefined
-let strongestWeaponID = 0
-let strongestWeaponName = inventory[strongestWeaponID].name
-let strongestWeaponDmg = inventory[strongestWeaponID].dmg
 let itemsCheck1 = 0
 let itemsCheck2 = 1
 
@@ -39,34 +42,22 @@ let pMaxMana = (pIntelegence + 3) * pLvl
 let pMana = pMaxMana
 let pManaRegen = pIntelegence * pLvl
 //Damage
+let equippedWeapon = fists
 let pStrengh = pLvl * 2;
-let pBDmg = pStrengh
-let eWeapon = (inventory[strongestWeaponID].dmg)
-let pWeaponDmg = eWeapon //later + buffs
-let pDmg = pBDmg + pWeaponDmg
+
 //Defense
 let pBDefense = pStrengh //natürlicher schutz
 let pEDefense = 0 //extras schutz zb rüstung
 let pArmour = pBDefense + pEDefense
+
 //__________________Entetys_____________________________
-const eSlime = {
+const slime = {
     name: "Slime of the Mansion",
     dmg: 1,
     bHealth: 5
 }
 
 //__________________Game_Functions______________________
-function checkEveryTurn() {
-    itemsCheck2 = inventory.length
-    if (itemsCheck2 > itemsCheck1) {
-        for (let i = 0; i < inventory.length; i++) {
-            if (inventory[i].dmg > strongestWeaponDmg) {
-                strongestWeaponID = inventory[i++]
-            }
-        }
-    }
-
-}
 function checkMovementInvalid() {
     let event;
     while (anwsInvalid) {
@@ -87,6 +78,23 @@ function checkFightInvalid() {
     } // Wenn die Antwort FLEE oder ATTACK ist, dann geht es weiter, weil der While Loop beendet wird (anwsInvalid wird false statt true) eine falsche Antwort lässt einen im Loop hängen
     return event
 }
+function showInventory() {
+    console.log("Your Inventory stors:", inventory.length, "items"
+    )
+    for (let i = 0; i < inventory.length; i++) {
+        console.log(i + 1 + ".", inventory[i].name)
+    }
+}
+function pickUpItem(newItem) {
+    inventory.push(newItem); // Füge das neue Item zum Inventar hinzu
+    //this.compareItems(newItem); // Vergleiche das neue Item mit dem ausgerüsteten Item
+}
+function compareItems(newItem) {//TODO: hier  !
+    // Wenn noch kein Item ausgerüstet ist oder das neue Item stärker ist als das aktuell ausgerüstete Item
+    if (equippedWeapon === null || newItem.dmg > equippedWeapon.dmg) {
+        equippedWeapon = newItem; // Setze das neue Item als ausgerüstetes Item
+    }
+}
 function exploreRoom() {
     function foundNothing() {
         console.log("*you look around in the room and find nothing*")
@@ -101,20 +109,12 @@ function exploreRoom() {
             console.log("*you look around and after a while you find somethin.*")
             console.log("* After you come closer you notice that what you found is an Wood Sword, it looks like a child used it to train.*")
             console.log("* You take it and equip it as you weapon*")
-            inventory.push(woodSword)
-            eWeapon = woodSword
+            pickUpItem(woodSword)
+            compareItems(woodSword)
         }
     }
     checkEveryTurn()
 }
-function showInventory() {
-    console.log("Your Inventory stors:", inventory.length, "items"
-    )
-    for (let i = 0; i < inventory.length; i++) {
-        console.log(i + 1 + ".", inventory[i].name)
-    }
-}
-
 //__________________Shown_Functions_____________________
 function plot() {
     const room = prompt("   -What is your name?-");
@@ -142,8 +142,8 @@ function stats() {
     console.log("Level:            ", pLvl)
     console.log("EP:               ", pXP)
     console.log("")
-    console.log("Weapon:            ", inventory[strongestWeaponID].name)
-    console.log("Damage:            ", pDmg)
+    console.log("Weapon:            ", equippedWeapon.name)
+    console.log("Damage:            ", equippedWeapon.dmg)
     console.log("")
     console.log("Location:          ", location)
     maps()
@@ -162,8 +162,22 @@ function maps() {
 
 }
 
-function fight() {
-
+function fight(enemy) {
+    console.log(`*You Leave the room and head west, you are now in an old garden filles with dead flowers. Out of the Blue a Slime come closer to your direction.*`);
+    console.log("Options: F- FLEE, A- ATTACK.");
+    const room = prompt("   -What is your choise?-");
+    if (room === "F") { console.log("*You run away until you are back in the entrance*"); location = "B-3"; roomb3() }
+    if (room === "A") {
+        if (Math.random() > 0.5) {
+            console.log(`*You Take your sword and swing it into the direction of the little slime. With one clean cut he is defeated*`);
+            pXP++;
+            console.log("Xp:", pXP); // XP gehen einen hoch und werden dann ausgegeben
+        } else {
+            console.log(`*You Take your sword and swing it into the direction of the little slime. Your Sword slips out of your hand and you miss. The slime jumps onto you and deal you ${sDmg}*`);
+            pHealth = pHealth - sDmg;
+            console.log("Health:", pHealth);
+        } //Slime macht sDMG und zieht die Player HP um den Schaden runter
+    }
 }
 
 
@@ -185,21 +199,7 @@ function roomb3() {
 }
 function roomc2() {
     location = "C-2"
-    console.log(`*You Leave the room and head west, you are now in an old garden filles with dead flowers. Out of the Blue a Slime come closer to your direction.*`);
-    console.log("Options: F- FLEE, A- ATTACK.");
-    const room = prompt("   -What is your choise?-");
-    if (room === "F") { console.log("*You run away until you are back in the entrance*"); location = "B-3"; roomb3() }
-    if (room === "A") {
-        if (Math.random() > 0.5) {
-            console.log(`*You Take your sword and swing it into the direction of the little slime. With one clean cut he is defeated*`);
-            pXP++;
-            console.log("Xp:", pXP); // XP gehen einen hoch und werden dann ausgegeben
-        } else {
-            console.log(`*You Take your sword and swing it into the direction of the little slime. Your Sword slips out of your hand and you miss. The slime jumps onto you and deal you ${sDmg}*`);
-            pHealth = pHealth - sDmg;
-            console.log("Health:", pHealth);
-        } //Slime macht sDMG und zieht die Player HP um den Schaden runter
-    }
+    fight(slime)
 }
 function roomc3() {
     location = "C-3";
@@ -211,12 +211,10 @@ function roomc3() {
         if (room === "A") {
             roomc2()
             location = ("C-2")
-        } else if (room === "D") {//noch nicht eingerichtet
-        } else if (room === "Q") {
-            stats()
-        } else if (room === "E") {
-            exploreRoom()
-        }
+        } else if (room === "D") { }
+        else if (room === "Q") { stats() }
+        else if (room === "E") { exploreRoom() }
+        if (room === "I") { showInventory() }
     }
 }
 
