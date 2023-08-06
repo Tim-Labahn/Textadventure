@@ -2,7 +2,7 @@
 const prompt = require("prompt-sync")({ sigint: true });
 //__________________Objects_____________________________
 const fists = {
-    name: "Your fists",
+    name: "Fists",
     dmg: 1
 }
 const woodSword = {
@@ -36,6 +36,7 @@ let pFitness = 10 * pLvl
 let pSpeed = pFitness / 5
 let pBHealth = pLvl * pFitness
 let pHealth = pBHealth
+let alive = true
 //Mana
 let pIntelegence = 5 * pLvl
 let pMaxMana = (pIntelegence + 3) * pLvl
@@ -54,7 +55,10 @@ let pArmour = pBDefense + pEDefense
 const slime = {
     name: "Slime of the Mansion",
     dmg: 1,
-    bHealth: 5
+    baseHealth: pLvl * 5,
+    health: pLvl * 5,
+    speed: 1,
+    defense: 0
 }
 
 //__________________Game_Functions______________________
@@ -113,7 +117,6 @@ function exploreRoom() {
             compareItems(woodSword)
         }
     }
-    checkEveryTurn()
 }
 //__________________Shown_Functions_____________________
 function plot() {
@@ -161,23 +164,38 @@ function maps() {
     console.log("")
 
 }
+function death() {
+    console.log("You died inside of the mansion.")
+}
 
 function fight(enemy) {
-    console.log(`*You Leave the room and head west, you are now in an old garden filles with dead flowers. Out of the Blue a Slime come closer to your direction.*`);
-    console.log("Options: F- FLEE, A- ATTACK.");
-    const room = prompt("   -What is your choise?-");
-    if (room === "F") { console.log("*You run away until you are back in the entrance*"); location = "B-3"; roomb3() }
-    if (room === "A") {
-        if (Math.random() > 0.5) {
-            console.log(`*You Take your sword and swing it into the direction of the little slime. With one clean cut he is defeated*`);
-            pXP++;
-            console.log("Xp:", pXP); // XP gehen einen hoch und werden dann ausgegeben
-        } else {
-            console.log(`*You Take your sword and swing it into the direction of the little slime. Your Sword slips out of your hand and you miss. The slime jumps onto you and deal you ${sDmg}*`);
-            pHealth = pHealth - sDmg;
-            console.log("Health:", pHealth);
-        } //Slime macht sDMG und zieht die Player HP um den Schaden runter
+    console.log(`*You enter a dark room, a cold breeze envelops you.*`);
+    console.log("Out of nowhere a", enemy.name, "attacked you.")
+    while (alive === true || enemy.health > 0) {
+        console.log("Options: F- FLEE, A- ATTACK, Q- Stats, I- Inventar.");
+        const room = prompt("   -What is your choise?-");
+        if (room === "F") { console.log("*You run away until you are back in the Entrance*"); location = "B-3"; roomb3() }
+        if (room === "A") {
+            if (Math.random() > 0.5) {
+                console.log("*You Take your", equippedWeapon.name, "and atack the", enemy.name, ". *");
+                console.log("-You hit the", enemy.name, "with your", equippedWeapon.name, ".");
+                enemy.health = enemy.health - equippedWeapon.dmg
+                console.log(enemy.health)
+            } else {
+                console.log("*You Take your", equippedWeapon.name, "and try to atack the", enemy.name, ". *");
+                console.log("*Your", equippedWeapon.name, "slips out of your hand and you miss. The ", enemy.name, " jumps into your direction and atacks you.*");
+                pHealth = pHealth - sDmg;
+                console.log("Health:", pHealth);//TODO:  entfernen, nur für debuging
+                if (pHealth < 1) {
+                    alive = false
+                    death()
+                }
+            } //Slime macht sDMG und zieht die Player HP um den Schaden runter
+        }
+        if (room === "I") { showInventory() }
+        if (room === "Q") { stats() }
     }
+
 }
 
 
