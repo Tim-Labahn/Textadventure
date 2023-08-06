@@ -23,6 +23,7 @@ let sHealth = slimeLevel * 2
 let anwsInvalid = true
 let location = undefined
 let firstTimeC3 = true
+let firstTimeC2 = true
 let eHealth = undefined
 let itemsCheck1 = 0
 let itemsCheck2 = 1
@@ -115,6 +116,8 @@ function exploreRoom() {
             console.log("* You take it and equip it as you weapon*")
             pickUpItem(woodSword)
             compareItems(woodSword)
+            console.log("-You just picked up your first Item.")
+            console.log("The game automaticly changes your weapon to the best one you got. You can check the damage and name in your Stats (Q)")
         }
     }
 }
@@ -166,6 +169,7 @@ function maps() {
 }
 function death() {
     console.log("You died inside of the mansion.")
+    alive = false
 }
 
 function fight(enemy) {
@@ -195,7 +199,7 @@ function fight(enemy) {
         if (room === "I") { showInventory() }
         if (room === "Q") { stats() }
     }
-
+    console.log("enemy dead")
 }
 
 
@@ -216,6 +220,17 @@ function roomb3() {
     }
 }
 function roomc2() {
+    if (firstTimeC2 === false) { foundNothing() }
+    if (firstTimeC2 === true) {
+        firstTimeC2 = false
+        console.log("*you look around and after a while you find somethin.*")
+        console.log("* After you come closer you notice that what you found is an Wood Sword, it looks like a child used it to train.*")
+        console.log("* You take it and equip it as you weapon*")
+        pickUpItem(woodSword)
+        compareItems(woodSword)
+        console.log("-You just picked up your first Item.")
+        console.log("The game automaticly changes your weapon to the best one you got. You can check the damage and name in your Stats (Q)")
+    }
     location = "C-2"
     fight(slime)
 }

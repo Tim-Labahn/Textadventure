@@ -1,37 +1,51 @@
-class Item { // Definiere die Klasse "Item", um Gegenstände zu repräsentieren
-    constructor(name, dmg) {
-        this.name = name; // Der Name des Gegenstands
-        this.dmg = dmg; // Der Schaden des Gegenstands
-    }
+let board = Array(9).fill('');
+let currentPlayer = 'X';
 
-    // Weitere Methoden oder Eigenschaften des Items können hier hinzugefügt werden
-}
+function checkWinner() {
+    const winPatterns = [
+        [0, 1, 2], [3, 4, 5], [6, 7, 8],
+        [0, 3, 6], [1, 4, 7], [2, 5, 8],
+        [0, 4, 8], [2, 4, 6]
+    ];
 
-// Definiere die Klasse "Player", um den Spieler zu repräsentieren
-class Player {
-    constructor() {
-        this.inventory = []; // Das Inventar des Spielers, ein Array von Gegenständen
-        this.equippedWeapon = null; // Das aktuell ausgerüstete Item (Waffe)
-    }
-
-    // Diese Methode wird aufgerufen, wenn der Spieler einen neuen Gegenstand aufnimmt
-    pickUpItem(newItem) {
-        this.inventory.push(newItem); // Füge das neue Item zum Inventar hinzu
-        this.compareItems(newItem); // Vergleiche das neue Item mit dem ausgerüsteten Item
-    }
-
-    // Diese private Methode vergleicht das neue Item mit dem ausgerüsteten Item
-    compareItems(newItem) {
-        // Wenn noch kein Item ausgerüstet ist oder das neue Item stärker ist als das aktuell ausgerüstete Item
-        if (this.equippedWeapon === null || newItem.dmg > this.equippedWeapon.dmg) {
-            this.equippedWeapon = newItem; // Setze das neue Item als ausgerüstetes Item
+    for (const pattern of winPatterns) {
+        const [a, b, c] = pattern;
+        if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+            return true;
         }
     }
+    return false;
+}
 
-    // Diese Methode gibt das aktuell ausgerüstete Item zurück
-    getEquippedWeapon() {
-        return this.equippedWeapon;
+function makeMove(position) {
+    if (board[position] === '' && !checkWinner()) {
+        board[position] = currentPlayer;
+        currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+    }
+}
+
+function printBoard() {
+    console.log(board.join(' | '));
+}
+
+function initGame() {
+    printBoard();
+    console.log("Let's play Tic-Tac-Toe! Player X goes first.");
+}
+
+function playGame() {
+    initGame();
+    while (!checkWinner() && board.includes('')) {
+        const position = Int(prompt(`Player ${currentPlayer}, enter your position (0-8):`));
+        makeMove(position);
+        printBoard();
     }
 
-    // Weitere Methoden für das Spieler-Objekt können hier hinzugefügt werden
+    if (checkWinner()) {
+        console.log(`Congratulations! Player ${currentPlayer === 'X' ? 'O' : 'X'} wins!`);
+    } else {
+        console.log("It's a draw!");
+    }
 }
+
+playGame();
