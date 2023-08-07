@@ -171,7 +171,7 @@ function death() {
 function fight(enemy) {
     console.log(`*You enter a dark room, a cold breeze envelops you.*`);
     console.log("Out of nowhere a", enemy.name, "attacked you.")
-    while (alive === true || enemy.health > 0) {
+    while (alive === true && enemy.health > 0) {
         console.log("Options: F- FLEE, A- ATTACK, Q- Stats, I- Inventar.");
         const room = prompt("   -What is your choise?-");
         if (room === "F") { console.log("*You run away until you are back in the Entrance*"); location = "B-3"; roomb3() }
@@ -180,7 +180,7 @@ function fight(enemy) {
                 console.log("*You Take your", equippedWeapon.name, "and atack the", enemy.name, ". *");
                 console.log("-You hit the", enemy.name, "with your", equippedWeapon.name, ".");
                 enemy.health = enemy.health - equippedWeapon.dmg
-                console.log(enemy.health)
+                console.log(enemy.health)//TODO: entfernen nur für debuging
             } else {
                 console.log("*You Take your", equippedWeapon.name, "and try to atack the", enemy.name, ". *");
                 console.log("*Your", equippedWeapon.name, "slips out of your hand and you miss. The ", enemy.name, " jumps into your direction and atacks you.*");
