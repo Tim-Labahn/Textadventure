@@ -122,8 +122,16 @@ function exploreRoom() {
 }
 //__________________Shown_Functions_____________________
 function plot() {
-    const room = prompt("                          -What is your name?-                          ")
+    console.log("                          -What is your name?- ")
+    const room = prompt("")
     pname = room
+    console.log("*Lost in the world of video games, you were deep into an exciting adventure on your screen. *")
+    console.log("Battles, quests, and victories absorbed your attention, making you forget the passing time. ")
+    console.log("When you finally looked away, the sun had already set, and the real world outside was cloaked in darkness.")
+    console.log("You look onto you phone and see its almost 21:30, so you quickly get up and look into your fridge")
+    console.log("")
+
+
     console.log("*Its a late night and the sun has alredy sunken.It cold outside and fog covers the floor.")
     console.log("You enter an old mansion, as you open the door you can hear it squek.")
     console.log("The secons both of your legs are inside, the door falls back into the lock and is now unable to open again.*")
