@@ -9,11 +9,9 @@ const woodSword = {
     name: "Wooden sword",
     dmg: 10
 }
-const roomInfos = {
-    b3: "",
-    c2: "",
-    c3: "",
-    c4: ""
+const slimeGoo = {
+    name: "the remains of an dead slime",
+    worth: 2
 }
 //__________________Game_Stats__________________________
 let inventory = [fists]
@@ -59,7 +57,8 @@ const slime = {
     baseHealth: pLvl * 5,
     health: pLvl * 5,
     speed: 1,
-    defense: 0
+    defense: 0,
+    loot: [slimeGoo]
 }
 
 //__________________Game_Functions______________________
@@ -123,7 +122,7 @@ function exploreRoom() {
 }
 //__________________Shown_Functions_____________________
 function plot() {
-    const room = prompt("   -What is your name?-");
+    const room = prompt("                          -What is your name?-                          ")
     pname = room
     console.log("*Its a late night and the sun has alredy sunken.It cold outside and fog covers the floor.")
     console.log("You enter an old mansion, as you open the door you can hear it squek.")
@@ -175,7 +174,7 @@ function death() {
 function fight(enemy) {
     console.log(`*You enter a dark room, a cold breeze envelops you.*`);
     console.log("Out of nowhere a", enemy.name, "attacked you.")
-    while (alive === true || enemy.health > 0) {
+    while (alive === true && enemy.health > 0) {
         console.log("Options: F- FLEE, A- ATTACK, Q- Stats, I- Inventar.");
         const room = prompt("   -What is your choise?-");
         if (room === "F") { console.log("*You run away until you are back in the Entrance*"); location = "B-3"; roomb3() }
