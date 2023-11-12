@@ -14,7 +14,6 @@ const slimeGoo = {
     worth: 2
 }
 //__________________Game_Stats__________________________
-let inventory = [fists]
 let slimeLevel = 1
 let sDmg = slimeLevel
 let sHealth = slimeLevel * 2
@@ -27,23 +26,30 @@ let itemsCheck1 = 0
 let itemsCheck2 = 1
 
 //__________________Player_Stats________________________
-let pname = undefined
-let pLvl = 1
-let pXP = 0
-//Health
-let pFitness = 10 * pLvl
-let pSpeed = pFitness / 5
-let pBHealth = pLvl * pFitness
-let pHealth = pBHealth
-let alive = true
-//Mana
-let pIntelegence = 5 * pLvl
-let pMaxMana = (pIntelegence + 3) * pLvl
-let pMana = pMaxMana
-let pManaRegen = pIntelegence * pLvl
-//Damage
-let equippedWeapon = fists
-let pStrengh = pLvl * 2;
+let Player= {
+    name: undefined,
+    inventory: [fists],
+    equippedWeaponSlot: 0,
+    Leveling:{
+        level: 1,
+        xp: 0,
+        erfahrungsPunkte:1,
+    },
+    Stats: {
+        fitness: 10 * Player.Leveling.level,
+        speed: Player.stats.fitness / 5,
+        maxHealth : Player.Leveling.level * Player.stats.fitness,
+        health: Player.maxHealth,
+        alive: Player.maxHealth>=0,
+        strengh: Player.Leveling.level * 2,
+    },
+    Mana:{
+        intelegence: 5 * Player.Leveling.level,
+        maxMana: (Player.Mana.intelegence + 3) * Player.Leveling.level,
+        mana: Player.Mana.maxHealth,
+        manaRegen: Player.Mana.intelegence * Player.Leveling.level,
+    }
+}
 
 //Defense
 let pBDefense = pStrengh //natürlicher schutz
