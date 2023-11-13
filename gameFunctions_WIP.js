@@ -14,7 +14,7 @@ function checkFightInvalid() {
 }
 
 function start() {
-    console.log("*Its a late night and the sun has alredy sunken.It cold outside and fog covers the floor.")
+    console.log('*Its a late night and the sun has alredy sunken.It cold outside and fog covers the floor.\n')
     console.log("You enter an old mansion, as you open the door you can hear it squek.")
     console.log("The secons both of your legs are inside, the door falls back into the lock and is now unable to open again.*")
     console.log("----------------------")

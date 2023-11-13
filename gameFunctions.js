@@ -9,42 +9,47 @@ const woodSword = {
     name: "Wooden sword",
     dmg: 10
 }
-const roomInfos = {
-    b3: "",
-    c2: "",
-    c3: "",
-    c4: ""
+const slimeGoo = {
+    name: "the remains of an dead slime",
+    worth: 2
 }
 //__________________Game_Stats__________________________
-let inventory = [fists]
 let slimeLevel = 1
 let sDmg = slimeLevel
 let sHealth = slimeLevel * 2
 let anwsInvalid = true
 let location = undefined
 let firstTimeC3 = true
+let firstTimeC2 = true
 let eHealth = undefined
 let itemsCheck1 = 0
 let itemsCheck2 = 1
 
 //__________________Player_Stats________________________
-let pname = undefined
-let pLvl = 1
-let pXP = 0
-//Health
-let pFitness = 10 * pLvl
-let pSpeed = pFitness / 5
-let pBHealth = pLvl * pFitness
-let pHealth = pBHealth
-let alive = true
-//Mana
-let pIntelegence = 5 * pLvl
-let pMaxMana = (pIntelegence + 3) * pLvl
-let pMana = pMaxMana
-let pManaRegen = pIntelegence * pLvl
-//Damage
-let equippedWeapon = fists
-let pStrengh = pLvl * 2;
+let Player= {
+    name: undefined,
+    inventory: [fists],
+    equippedWeaponSlot: 0,
+    Leveling:{
+        level: 1,
+        xp: 0,
+        erfahrungsPunkte:1,
+    },
+    Stats: {
+        fitness: 10 * Player.Leveling.level,
+        speed: Player.stats.fitness / 5,
+        maxHealth : Player.Leveling.level * Player.stats.fitness,
+        health: Player.maxHealth,
+        alive: Player.maxHealth>=0,
+        strengh: Player.Leveling.level * 2,
+    },
+    Mana:{
+        intelegence: 5 * Player.Leveling.level,
+        maxMana: (Player.Mana.intelegence + 3) * Player.Leveling.level,
+        mana: Player.Mana.maxHealth,
+        manaRegen: Player.Mana.intelegence * Player.Leveling.level,
+    }
+}
 
 //Defense
 let pBDefense = pStrengh //natürlicher schutz
@@ -58,7 +63,8 @@ const slime = {
     baseHealth: pLvl * 5,
     health: pLvl * 5,
     speed: 1,
-    defense: 0
+    defense: 0,
+    loot: [slimeGoo]
 }
 
 //__________________Game_Functions______________________
@@ -115,13 +121,23 @@ function exploreRoom() {
             console.log("* You take it and equip it as you weapon*")
             pickUpItem(woodSword)
             compareItems(woodSword)
+            console.log("-You just picked up your first Item.")
+            console.log("The game automaticly changes your weapon to the best one you got. You can check the damage and name in your Stats (Q)")
         }
     }
 }
 //__________________Shown_Functions_____________________
 function plot() {
-    const room = prompt("   -What is your name?-");
+    console.log("                          -What is your name?- ")
+    const room = prompt("")
     pname = room
+    console.log("*Lost in the world of video games, you were deep into an exciting adventure on your screen. *")
+    console.log("Battles, quests, and victories absorbed your attention, making you forget the passing time. ")
+    console.log("When you finally looked away, the sun had already set, and the real world outside was cloaked in darkness.")
+    console.log("You look onto you phone and see its almost 21:30, so you quickly get up and look into your fridge")
+    console.log("")
+
+
     console.log("*Its a late night and the sun has alredy sunken.It cold outside and fog covers the floor.")
     console.log("You enter an old mansion, as you open the door you can hear it squek.")
     console.log("The secons both of your legs are inside, the door falls back into the lock and is now unable to open again.*")
@@ -166,6 +182,7 @@ function maps() {
 }
 function death() {
     console.log("You died inside of the mansion.")
+    alive = false
 }
 
 function fight(enemy) {
@@ -195,7 +212,7 @@ function fight(enemy) {
         if (room === "I") { showInventory() }
         if (room === "Q") { stats() }
     }
-
+    console.log("enemy dead")
 }
 
 
@@ -216,6 +233,17 @@ function roomb3() {
     }
 }
 function roomc2() {
+    if (firstTimeC2 === false) { foundNothing() }
+    if (firstTimeC2 === true) {
+        firstTimeC2 = false
+        console.log("*you look around and after a while you find somethin.*")
+        console.log("* After you come closer you notice that what you found is an Wood Sword, it looks like a child used it to train.*")
+        console.log("* You take it and equip it as you weapon*")
+        pickUpItem(woodSword)
+        compareItems(woodSword)
+        console.log("-You just picked up your first Item.")
+        console.log("The game automaticly changes your weapon to the best one you got. You can check the damage and name in your Stats (Q)")
+    }
     location = "C-2"
     fight(slime)
 }
